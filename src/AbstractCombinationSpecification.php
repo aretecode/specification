@@ -85,7 +85,7 @@ abstract class AbstractCombinationSpecification extends AbstractSpecification im
      * @param  string        $as 
      * @return void
      */
-    public function as($as) {
+    public function asCombinationType($as) {
         $as = ucfirst($as);
         $specificationOne = $this->getSpecificationAs($this->specificationOne, 'as' . $as);
         $specificationTwo = $this->getSpecificationAs($this->specificationTwo, 'as' . $as);
@@ -99,21 +99,21 @@ abstract class AbstractCombinationSpecification extends AbstractSpecification im
      * @return OrSpecification
      */
     public function asOr() {
-        return $this->as('Or');
+        return $this->asCombinationType('Or');
     }  
 
     /**
      * @return AndSpecification
      */
     public function asAnd() {        
-        return $this->as('And');
+        return $this->asCombinationType('And');
     } 
 
     /**
      * @return XorSpecification
      */
     public function asXor() {
-        return $this->as('Xor');
+        return $this->asCombinationType('Xor');
     }
 
     /**
