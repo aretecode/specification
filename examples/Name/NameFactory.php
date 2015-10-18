@@ -11,7 +11,7 @@ class NameFactory {
             return new Name($first, "", "");
         }
         
-        // if second IS set, third is NOT, they provided fist and last
+        // if second IS set and third is NOT, they provided first and last
         if ("" !== $second && "" === $third) {
             return new Name($first, $third);
         }
