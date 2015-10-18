@@ -39,6 +39,7 @@ Run via the command line by going to `arete/specification` directory and running
 * [ ] ::isGeneralizationOf()
 * [ ] ::isSpecializationOf()
 * [ ] ::asQuery() for use with db, whether it uses argument, or sep methods
+* [ ] abstract part of the Collection Pipeline matching into default/premades
 
 ### P.S.
 (I have had this written since I read the DDD books, I updated it a little and just found an old one by [@mathiasverraes](https://github.com/mathiasverraes/DomainTools) which was interesting!)

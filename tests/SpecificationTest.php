@@ -149,7 +149,7 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
         
         $xorDefined = new XorSpecification($this->truemock, $this->falsemock);
         $this->assertTrue($xor instanceof XorSpecification);
-        // $this->assertEquals($xor, $xorDefined);
+        $this->assertEquals($xor, $xorDefined);
     }
     public function testAsOr() {
         $and = new AndSpecification($this->truemock, $this->truemock);
