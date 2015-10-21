@@ -173,13 +173,13 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
     public function testGetSpecificationsMatching() {
         $and = new AndSpecification($this->truemock, $this->falsemock);
         $matchings = $and->getSpecificationsMatching();
-        $this->assertEquals($matchings, [$this->truemock, $this->falsemock]);
+        $this->assertEquals($matchings, [$this->falsemock, $this->truemock], 'two arrays equaling using canonicalize', 0.0, 10, true);
     }
 
     public function testGetSpecificationsMatchingUnique() {
         $and = new AndSpecification($this->truemock, $this->truemock);
         $matchings = $and->getSpecificationsMatching();
-        $this->assertEquals($matchings, [$this->truemock]);
+        $this->assertEquals($matchings, [$this->truemock], 'two arrays equaling using canonicalize', 0.0, 10, true);
     }
 
     public function testGetSpecificationsMatchingNested() {
@@ -187,7 +187,7 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
         $or = new OrSpecification($this->truemock, $this->falsezeromock);
         $and = new AndSpecification($or, $not);
         $matching = $and->getSpecificationsMatching();
-        $this->assertEquals($matching, [$not, $or]);
+        $this->assertEquals($matching, [$not, $or], 'two arrays equaling using canonicalize', 0.0, 10, true);
     }
 
     public function testGetSpecificationsMatchingNestedPattern() {
@@ -196,7 +196,7 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
         $and = new AndSpecification($or, $not);
         $matching = $and->getSpecificationsMatching([['not' => 'MockSpecification']]);
 
-        $this->assertEquals($matching, [$not]);
+        $this->assertEquals($matching, [$not], 'two arrays equaling using canonicalize', 0.0, 10, true);
     }
 
     public function testGetMultipleSpecificationsMatchingNestedPatternNotGettingChildren() {
@@ -207,7 +207,7 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
         $and = new AndSpecification($andOne, $callableSpecification);
         $matching = $and->getSpecificationsMatching(['and', 'callable', ['not' => 'MockSpecification']]);
 
-        $this->assertEquals($matching, [$andOne, $callableSpecification]);
+        $this->assertEquals($matching, [$andOne, $callableSpecification], 'two arrays equaling using canonicalize', 0.0, 10, true);
     }
     public function testGetMultipleSpecificationsMatchingPattern() {
         $not = $this->falsemock->asNot();
@@ -215,6 +215,6 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
         $and = new AndSpecification($not, $callableSpecification);
         $matching = $and->getSpecificationsMatching([['not' => 'MockSpecification'], 'callable', CallableSpecification::CLASS]);
 
-        $this->assertEquals($matching, [$not, $callableSpecification]);
+        $this->assertEquals($matching, [$not, $callableSpecification], 'two arrays equaling using canonicalize', 0.0, 10, true);
     } 
 }
