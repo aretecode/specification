@@ -30,12 +30,6 @@ Run via the command line by going to `arete/specification` directory and running
 
 
 ## @TODO
-* [ ] ::getAllSpecifications()
-* [ ] ::getAllNotSpecifications()
-* [ ] ::getAllAndSpecifications()
-* [ ] ::getAllXorSpecifications()
-* [ ] ::getAllOrSpecifications()
-* [ ] ::getAll__Specifications($not = false) // if $not then search for ones with not
 * [x] ::remainderUnsatisfiedBy()
 * [ ] ::isGeneralizationOf()
 * [ ] ::isSpecializationOf()
