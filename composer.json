@@ -2,7 +2,7 @@
     "name": "arete/specification",
     "type": "library",
     "license": "MIT",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "description": "PHP Specification library.",
     "keywords": ["specification", "ddd", "satisfy", "satisfied"],
     "authors": [
@@ -33,7 +33,7 @@
     },    
     "extra": {
         "branch-alias": {
-            "dev-master": "0.3.3-dev"
+            "dev-master": "0.3.4-dev"
         }
     },
     "minimum-stability": "dev"

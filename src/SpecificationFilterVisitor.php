@@ -56,14 +56,16 @@ class SpecificationFilterVisitor {
         $isNot = false;
 
         // if it is an array, currently that can only mean a nested `not`
-        if (is_array($type)) {
-            $type = current($type);
+        if (is_array($type) || 'not' == strtolower($type) || NotSpecification::CLASS == $type) {
             $isNot = true;
             
             // even though it is looking for a nested not, it might not BE a nested not that we are checking
             if ($specification instanceof NotSpecification) 
                 $specification = $specification->getSpecification();
         }
+
+        if (is_array($type)) 
+            $type = current($type);
 
         // we want to do this after already checking if it was an array/not
         $type = ucfirst($type);

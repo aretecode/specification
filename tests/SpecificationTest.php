@@ -172,22 +172,30 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
 
     public function testGetSpecificationsMatching() {
         $and = new AndSpecification($this->truemock, $this->falsemock);
-        $matchings = $and->getSpecificationsMatching();
-        $this->assertEquals($matchings, [$this->falsemock, $this->truemock], 'two arrays equaling using canonicalize', 0.0, 10, true);
+        $matching = $and->getSpecificationsMatching();
+        $expected = [$this->falsemock, $this->truemock];
+        $this->orderByValueAndAssignNewKeys($matching);
+        $this->orderByValueAndAssignNewKeys($expected);
+        $this->assertEquals($expected, $matching, 'two matching specification arrays equaling');
     }
 
     public function testGetSpecificationsMatchingUnique() {
         $and = new AndSpecification($this->truemock, $this->truemock);
-        $matchings = $and->getSpecificationsMatching();
-        $this->assertEquals($matchings, [$this->truemock], 'two arrays equaling using canonicalize', 0.0, 10, true);
+        $matching = $and->getSpecificationsMatching();
+        $this->assertEquals($matching, [$this->truemock], 'two unique specification arrays equaling');
     }
 
     public function testGetSpecificationsMatchingNested() {
         $not = $this->falsemock->asNot();
         $or = new OrSpecification($this->truemock, $this->falsezeromock);
         $and = new AndSpecification($or, $not);
+
         $matching = $and->getSpecificationsMatching();
-        $this->assertEquals($matching, [$not, $or], 'two arrays equaling using canonicalize', 0.0, 10, true);
+        $expected = [$or, $not];
+        $this->orderByValueAndAssignNewKeys($matching);
+        $this->orderByValueAndAssignNewKeys($expected);
+
+        $this->assertEquals($expected, $matching, 'two matching nested specification arrays');
     }
 
     public function testGetSpecificationsMatchingNestedPattern() {
@@ -195,8 +203,12 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
         $or = new OrSpecification($this->truemock, $this->falsemock);
         $and = new AndSpecification($or, $not);
         $matching = $and->getSpecificationsMatching([['not' => 'MockSpecification']]);
+        $expected = [$not];
 
-        $this->assertEquals($matching, [$not], 'two arrays equaling using canonicalize', 0.0, 10, true);
+        $this->orderByValueAndAssignNewKeys($matching);
+        $this->orderByValueAndAssignNewKeys($expected);
+
+        $this->assertEquals($expected, $matching, 'two pattern matching nested arrays equaling');
     }
 
     public function testGetMultipleSpecificationsMatchingNestedPatternNotGettingChildren() {
@@ -205,16 +217,30 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
         $or = new OrSpecification($this->truemock, $this->falsemock);
         $andOne = new AndSpecification($or, $not);
         $and = new AndSpecification($andOne, $callableSpecification);
-        $matching = $and->getSpecificationsMatching(['and', 'callable', ['not' => 'MockSpecification']]);
 
-        $this->assertEquals($matching, [$andOne, $callableSpecification], 'two arrays equaling using canonicalize', 0.0, 10, true);
+        $matching = $and->getSpecificationsMatching(['and', 'callable', ['not' => 'MockSpecification']]);
+        $expected = [$andOne, $callableSpecification];
+        $this->orderByValueAndAssignNewKeys($matching);
+        $this->orderByValueAndAssignNewKeys($expected);
+
+        $this->assertEquals($expected, $matching, 'two pattern matching nested arrays equaling without children');
     }
     public function testGetMultipleSpecificationsMatchingPattern() {
         $not = $this->falsemock->asNot();
         $callableSpecification = new CallableSpecification(function(){return true;});
         $and = new AndSpecification($not, $callableSpecification);
+       
         $matching = $and->getSpecificationsMatching([['not' => 'MockSpecification'], 'callable', CallableSpecification::CLASS]);
+        $expected = [$not, $callableSpecification];
+        $this->orderByValueAndAssignNewKeys($matching);
+        $this->orderByValueAndAssignNewKeys($expected);
 
-        $this->assertEquals($matching, [$not, $callableSpecification], 'two arrays equaling using canonicalize', 0.0, 10, true);
+        $this->assertEquals($expected, $matching, 'two multiple pattern matching nested arrays equaling');
     } 
+
+
+    public function orderByValueAndAssignNewKeys(&$array) {
+        asort($array);
+        $array = array_values($array);
+    }
 }
