@@ -5,6 +5,7 @@
 [![Latest Unstable Version](https://poser.pugx.org/arete/specification/v/unstable)](https://packagist.org/packages/arete/specification)
 [![License](https://poser.pugx.org/arete/specification/license)](http://packagist.org/packages/arete/specification)
 [![Codacy Badge](https://api.codacy.com/project/badge/2a00e5db8e1444fa84a815e825056049)](https://www.codacy.com/app/aretecode/specification)
+
 Specification library in PHP.
 
 [Eric Evans & Martin Fowlers paper on Specifications](http://martinfowler.com/apsupp/spec.pdf)

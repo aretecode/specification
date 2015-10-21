@@ -25,6 +25,15 @@ class CompositeSpecification extends AbstractSpecification implements Specificat
     }
 
     /**
+     * add another Specification
+     *
+     * @param Specification $specification
+     */
+    public function addSpecification(Specification $specification) {
+        $this->specifications[] = $specification;
+    }
+
+    /**
      * checks each of the Specifications in $this->specifications
      * 
      * @param  mixed $object 
@@ -45,12 +54,11 @@ class CompositeSpecification extends AbstractSpecification implements Specificat
      *          that are not satisfied by the argument
      */
     public function getSpecificationsNotSatisfiedBy($object) {
-        // resetting so it is empty
-        $this->notSatisfied = [];
+        $notSatisfied = [];
 
         foreach ($this->specifications as $specification)
-            $this->appendIfNotSatisfiedBy($specification, $object);
+            $this->appendIfNotSatisfiedBy($specification, $object, $notSatisfied);
 
-        return $this->notSatisfied;
+        return $notSatisfied;
     }
 }

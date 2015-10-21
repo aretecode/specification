@@ -27,4 +27,11 @@ class NotSpecification extends AbstractSpecification implements Specification {
     public function isSatisfiedBy($object) {
         return !$this->specification->isSatisfiedBy($object);
     }
+
+    /**
+     * @return Specification
+     */
+    public function getSpecification() {
+        return $this->specification;
+    }
 }

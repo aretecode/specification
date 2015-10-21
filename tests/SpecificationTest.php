@@ -169,6 +169,52 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($and->isSatisfiedBy(new stdClass));
         $this->assertEquals($and, $andDefined);
     }
+
+    public function testGetSpecificationsMatching() {
+        $and = new AndSpecification($this->truemock, $this->falsemock);
+        $matchings = $and->getSpecificationsMatching();
+        $this->assertEquals($matchings, [$this->truemock, $this->falsemock]);
+    }
+
+    public function testGetSpecificationsMatchingUnique() {
+        $and = new AndSpecification($this->truemock, $this->truemock);
+        $matchings = $and->getSpecificationsMatching();
+        $this->assertEquals($matchings, [$this->truemock]);
+    }
+
+    public function testGetSpecificationsMatchingNested() {
+        $not = $this->falsemock->asNot();
+        $or = new OrSpecification($this->truemock, $this->falsezeromock);
+        $and = new AndSpecification($or, $not);
+        $matching = $and->getSpecificationsMatching();
+        $this->assertEquals($matching, [$not, $or]);
+    }
+
+    public function testGetSpecificationsMatchingNestedPattern() {
+        $not = $this->falsemock->asNot();
+        $or = new OrSpecification($this->truemock, $this->falsemock);
+        $and = new AndSpecification($or, $not);
+        $matching = $and->getSpecificationsMatching([['not' => 'MockSpecification']]);
+
+        $this->assertEquals($matching, [$not]);
+    }
+
+    public function testGetMultipleSpecificationsMatchingNestedPatternNotGettingChildren() {
+        $not = $this->falsemock->asNot();
+        $callableSpecification = new CallableSpecification(function(){return true;});
+        $or = new OrSpecification($this->truemock, $this->falsemock);
+        $andOne = new AndSpecification($or, $not);
+        $and = new AndSpecification($andOne, $callableSpecification);
+        $matching = $and->getSpecificationsMatching(['and', 'callable', ['not' => 'MockSpecification']]);
+
+        $this->assertEquals($matching, [$andOne, $callableSpecification]);
+    }
+    public function testGetMultipleSpecificationsMatchingPattern() {
+        $not = $this->falsemock->asNot();
+        $callableSpecification = new CallableSpecification(function(){return true;});
+        $and = new AndSpecification($not, $callableSpecification);
+        $matching = $and->getSpecificationsMatching([['not' => 'MockSpecification'], 'callable', CallableSpecification::CLASS]);
+
+        $this->assertEquals($matching, [$not, $callableSpecification]);
+    } 
 }
-
-

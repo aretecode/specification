@@ -16,7 +16,6 @@ class GroupSpecification extends AbstractSpecification implements Specification 
     }
 
     /**
-     * 
      * $specification = method_exists($this->specification, 'asOr') ? $this->specification->asOr() : $specification;
      *
      * @param  array
