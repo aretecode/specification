@@ -236,24 +236,47 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
 
         $expected = $this->orderByValueAndAssignNewKeys($expected);
         $matching = $this->orderByValueAndAssignNewKeys($matching);
-       
-        $this->assertEquals($expected, $matching, 'two multiple pattern matching nested arrays equaling');
+        
+        $expectedToMatching = arrayDiff($expected, $matching);
+        $matchingToExpected = arrayDiff($matching, $expected);
+
+        $this->assertEquals([], $expectedToMatching, 'two multiple pattern matching nested arrays equaling');
+        $this->assertEquals([], $matchingToExpected, 'two multiple pattern matching nested arrays equaling');
     } 
 
     public function orderByValueAndAssignNewKeys(&$array) {
         sort($array);
-        
-        usort($array, function($a, $b) {
-            $la = strlen(get_class($a));
-            $lb = strlen(get_class($b));
-
-            if ($la == $lb)
-                return 0;
-
-            return ($la < $lb) ? -1 : +1;
-        });
-
-       
+        $array = array_values($array);       
         return $array;
     }
+}
+
+class ObjectIsInArray implements Specification {
+    use SpecificationTrait;
+
+    protected $array;
+    public function __construct(array $array) {
+        $this->array = $array;
+    }
+
+    public function isSatisfiedBy($value) {
+        foreach ($this->array as $thisValue) 
+            if ($thisValue == $value)
+                return true;
+
+        return false;
+    }
+}
+
+function arrayDiff($array, $arrayIn) {
+    $objectsNotInArray = [];
+    $objectIsInArray = new ObjectIsInArray($arrayIn);
+    foreach ($array as $value) 
+        if (!$objectIsInArray->isSatisfiedBy($value))
+            $objectsNotInArray[] = $value;
+
+    if (!empty($objectsNotInArray))
+        return $objectsNotInArray;
+
+    return [];
 }
