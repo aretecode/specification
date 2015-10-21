@@ -174,6 +174,7 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
         $and = new AndSpecification($this->truemock, $this->falsemock);
         $matching = $and->getSpecificationsMatching();
         $expected = [$this->falsemock, $this->truemock];
+
         $this->orderByValueAndAssignNewKeys($matching);
         $this->orderByValueAndAssignNewKeys($expected);
         $this->assertEquals($expected, $matching, 'two matching specification arrays equaling');
@@ -231,16 +232,28 @@ class SpecificationsTest extends \PHPUnit_Framework_TestCase {
         $and = new AndSpecification($not, $callableSpecification);
        
         $matching = $and->getSpecificationsMatching([['not' => 'MockSpecification'], 'callable', CallableSpecification::CLASS]);
-        $expected = [$not, $callableSpecification];
-        $this->orderByValueAndAssignNewKeys($matching);
-        $this->orderByValueAndAssignNewKeys($expected);
+        $expected = [$callableSpecification, $not];
 
+        $expected = $this->orderByValueAndAssignNewKeys($expected);
+        $matching = $this->orderByValueAndAssignNewKeys($matching);
+       
         $this->assertEquals($expected, $matching, 'two multiple pattern matching nested arrays equaling');
     } 
 
-
     public function orderByValueAndAssignNewKeys(&$array) {
-        asort($array);
-        $array = array_values($array);
+        sort($array);
+        
+        usort($array, function($a, $b) {
+            $la = strlen(get_class($a));
+            $lb = strlen(get_class($b));
+
+            if ($la == $lb)
+                return 0;
+
+            return ($la < $lb) ? -1 : +1;
+        });
+
+       
+        return $array;
     }
 }
